@@ -3,544 +3,424 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HVS Admin Dashboard</title>
-
+<title>HVS Admin • Home Vet Service</title>
 <meta name="theme-color" content="#0f766e">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-    --primary:#0f766e;
-    --primary-dark:#115e59;
-    --bg:#f4f7f9;
-    --card:#ffffff;
-    --text:#17202a;
-    --muted:#6b7280;
-    --border:#e5e7eb;
-    --danger:#dc2626;
-    --warning:#d97706;
-    --success:#16a34a;
+  --primary:#0f766e;
+  --primary2:#14b8a6;
+  --dark:#123333;
+  --bg:#f5f7f9;
+  --card:#fff;
+  --text:#17202a;
+  --muted:#64748b;
+  --border:#e5e7eb;
+  --red:#dc2626;
+  --yellow:#d97706;
+  --green:#16a34a;
+  --blue:#2563eb;
 }
-
 body{
-    background:var(--bg);
-    color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
+button,input,select{font:inherit}
 
 /* LOGIN */
-
-.login-page{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    background:
-        radial-gradient(circle at top left,#ccfbf1,transparent 35%),
-        radial-gradient(circle at bottom right,#dbeafe,transparent 35%),
-        #f8fafc;
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 10% 10%,#ccfbf1,transparent 32%),
+    radial-gradient(circle at 90% 90%,#dbeafe,transparent 32%),
+    #f8fafc;
 }
-
-.login-box{
-    width:100%;
-    max-width:430px;
-    background:white;
-    padding:34px;
-    border-radius:24px;
-    box-shadow:0 20px 60px rgba(15,23,42,.12);
+.login-card{
+  width:100%;
+  max-width:420px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:26px;
+  padding:34px;
+  box-shadow:0 25px 70px rgba(15,23,42,.12);
 }
-
 .logo{
-    width:68px;
-    height:68px;
-    border-radius:20px;
-    background:var(--primary);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    margin:auto auto 18px;
+  width:72px;height:72px;
+  margin:0 auto 18px;
+  border-radius:21px;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;
+  box-shadow:0 10px 25px rgba(15,118,110,.25);
 }
-
-.login-box h1{
-    text-align:center;
-    font-size:25px;
+.login h1{text-align:center;font-size:27px}
+.login-sub{text-align:center;color:var(--muted);margin:7px 0 25px}
+.field{
+  width:100%;
+  padding:14px 15px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  outline:none;
+  margin-bottom:13px;
 }
-
-.login-box p{
-    text-align:center;
-    color:var(--muted);
-    margin:8px 0 25px;
+.field:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(15,118,110,.1);
 }
-
-.input{
-    width:100%;
-    padding:14px 15px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    outline:none;
-    font-size:15px;
-    margin-bottom:14px;
+.primary-btn{
+  width:100%;
+  border:0;
+  padding:14px;
+  border-radius:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:800;
+  cursor:pointer;
 }
-
-.input:focus{
-    border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(15,118,110,.1);
-}
-
-.btn{
-    border:none;
-    cursor:pointer;
-    padding:13px 18px;
-    border-radius:12px;
-    font-weight:700;
-    transition:.2s;
-}
-
-.btn-primary{
-    width:100%;
-    color:white;
-    background:var(--primary);
-}
-
-.btn-primary:hover{
-    background:var(--primary-dark);
-    transform:translateY(-1px);
-}
-
+.primary-btn:hover{background:#115e59}
 .error{
-    display:none;
-    background:#fee2e2;
-    color:#991b1b;
-    padding:11px;
-    border-radius:10px;
-    margin-bottom:15px;
-    font-size:14px;
+  display:none;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:12px;
+  border-radius:11px;
+  margin-bottom:14px;
+  font-size:14px;
+}
+.login-note{
+  text-align:center;
+  color:#94a3b8;
+  font-size:12px;
+  margin-top:18px;
 }
 
 /* APP */
-
-.app{
-    display:none;
-    min-height:100vh;
-}
-
+.app{display:none;min-height:100vh}
 .sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:245px;
-    background:#102a2a;
-    color:white;
-    padding:22px 15px;
-    z-index:50;
+  position:fixed;
+  inset:0 auto 0 0;
+  width:250px;
+  background:var(--dark);
+  color:white;
+  padding:22px 15px;
+  z-index:100;
 }
-
 .brand{
-    display:flex;
-    align-items:center;
-    gap:11px;
-    padding:8px 10px 28px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:7px 10px 28px;
 }
-
-.brand-icon{
-    width:43px;
-    height:43px;
-    border-radius:13px;
-    background:#14b8a6;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
+.brand-logo{
+  width:45px;height:45px;
+  border-radius:14px;
+  background:var(--primary2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
 }
-
-.brand strong{
-    display:block;
-    font-size:17px;
-}
-
-.brand small{
-    color:#9ca3af;
-}
-
-.nav{
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-}
-
+.brand strong{display:block;font-size:18px}
+.brand small{color:#9fb4b4}
+.nav{display:grid;gap:7px}
 .nav button{
-    border:none;
-    background:transparent;
-    color:#cbd5e1;
-    text-align:left;
-    padding:13px 14px;
-    border-radius:11px;
-    cursor:pointer;
-    font-size:14px;
+  border:0;
+  background:transparent;
+  color:#cbd5e1;
+  padding:13px 14px;
+  border-radius:11px;
+  text-align:left;
+  cursor:pointer;
 }
-
-.nav button:hover,
-.nav button.active{
-    background:#164e4a;
-    color:white;
+.nav button:hover,.nav button.active{
+  background:#164e4a;
+  color:#fff;
 }
-
 .logout{
-    position:absolute;
-    left:15px;
-    right:15px;
-    bottom:20px;
-    background:#7f1d1d!important;
-    color:#fecaca!important;
+  position:absolute;
+  bottom:20px;
+  left:15px;
+  right:15px;
+  background:#7f1d1d!important;
+  color:#fecaca!important;
 }
 
-/* MAIN */
-
-.main{
-    margin-left:245px;
-    min-height:100vh;
-}
-
+.main{margin-left:250px;min-height:100vh}
 .topbar{
-    height:76px;
-    background:white;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 30px;
-    position:sticky;
-    top:0;
-    z-index:30;
+  height:74px;
+  background:white;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:50;
 }
-
-.topbar h2{
-    font-size:21px;
+.top-left{display:flex;align-items:center;gap:13px}
+.topbar h2{font-size:21px}
+.admin{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+  font-size:14px;
 }
-
-.admin-user{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
 .avatar{
-    width:39px;
-    height:39px;
-    border-radius:50%;
-    background:#ccfbf1;
-    color:var(--primary-dark);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:800;
+  width:40px;height:40px;
+  border-radius:50%;
+  background:#ccfbf1;
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
 }
-
-.content{
-    padding:28px;
+.menu{
+  display:none;
+  border:0;
+  background:none;
+  font-size:25px;
 }
+.content{padding:28px}
+.welcome{margin-bottom:22px}
+.welcome h1{font-size:27px;margin-bottom:5px}
+.welcome p{color:var(--muted)}
 
-.welcome{
-    margin-bottom:25px;
-}
-
-.welcome h1{
-    font-size:26px;
-    margin-bottom:5px;
-}
-
-.welcome p{
-    color:var(--muted);
-}
-
-/* CARDS */
-
+/* STATS */
 .stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px;
-    margin-bottom:25px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
 }
-
-.stat-card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.stat{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-
-.stat-card h3{
-    font-size:27px;
-    margin-top:5px;
+.stat small{color:var(--muted)}
+.stat strong{display:block;font-size:29px;margin-top:5px}
+.icon{
+  width:49px;height:49px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
 }
+.i-total{background:#dbeafe}
+.i-new{background:#fef3c7}
+.i-confirmed{background:#dcfce7}
+.i-completed{background:#ccfbf1}
 
-.stat-card p{
-    color:var(--muted);
-    font-size:13px;
-}
-
-.stat-icon{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:21px;
-}
-
-.total .stat-icon{background:#dbeafe}
-.pending .stat-icon{background:#fef3c7}
-.confirmed .stat-icon{background:#dcfce7}
-.completed .stat-icon{background:#ccfbf1}
-
-/* CONTENT GRID */
-
+/* PANELS */
 .grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:20px;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:18px;
 }
-
 .panel{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    overflow:hidden;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
 }
-
 .panel-head{
-    padding:19px 20px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
+.panel-head h2{font-size:17px}
+.panel-body{padding:20px}
 
-.panel-head h2{
-    font-size:17px;
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:700;
 }
+.btn-soft{background:#ccfbf1;color:#115e59}
+.btn-refresh{background:#eef2ff;color:#3730a3}
+.btn-danger{background:#fee2e2;color:#991b1b}
+.btn-success{background:#dcfce7;color:#166534}
 
-.panel-body{
-    padding:20px;
-}
-
-/* REQUESTS */
-
+/* TABLE */
 .toolbar{
-    display:flex;
-    gap:10px;
-    margin-bottom:16px;
+  display:flex;
+  gap:10px;
+  margin-bottom:16px;
 }
-
 .search{
-    flex:1;
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:11px 13px;
-    outline:none;
+  flex:1;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  outline:none;
 }
-
-.select{
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:10px;
-    background:white;
+.search:focus{border-color:var(--primary)}
+select{
+  padding:11px 13px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:white;
 }
-
-.table-wrap{
-    overflow-x:auto;
-}
-
+.table-wrap{overflow:auto}
 table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
+  width:100%;
+  min-width:900px;
+  border-collapse:collapse;
 }
-
 th,td{
-    padding:14px 12px;
-    border-bottom:1px solid #f0f0f0;
-    text-align:left;
-    font-size:13px;
+  padding:13px 12px;
+  border-bottom:1px solid #f0f0f0;
+  text-align:left;
+  font-size:13px;
 }
-
 th{
-    color:#6b7280;
-    font-weight:700;
-    background:#fafafa;
+  background:#fafafa;
+  color:var(--muted);
+  font-size:12px;
 }
-
 .status{
-    display:inline-flex;
-    padding:5px 9px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:800;
+  border:0;
+  border-radius:999px;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:800;
 }
+.status.new{background:#fef3c7;color:#92400e}
+.status.confirmed{background:#dcfce7;color:#166534}
+.status.completed{background:#ccfbf1;color:#115e59}
+.status.cancelled{background:#fee2e2;color:#991b1b}
 
-.status.pending{
-    background:#fef3c7;
-    color:#92400e;
+.actions{display:flex;gap:5px;flex-wrap:wrap}
+.action-btn{
+  border:0;
+  border-radius:8px;
+  padding:7px 9px;
+  cursor:pointer;
+  font-size:11px;
+  font-weight:700;
 }
-
-.status.confirmed{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.status.completed{
-    background:#ccfbf1;
-    color:#115e59;
-}
-
-.status.cancelled{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-/* EMPTY */
+.a-confirm{background:#dcfce7;color:#166534}
+.a-complete{background:#ccfbf1;color:#115e59}
+.a-cancel{background:#fee2e2;color:#991b1b}
 
 .empty{
-    text-align:center;
-    padding:45px 15px;
-    color:var(--muted);
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
 }
-
-.empty-icon{
-    font-size:40px;
-    margin-bottom:10px;
-}
+.empty-icon{font-size:40px;margin-bottom:10px}
 
 /* QUICK ACTIONS */
-
-.actions{
-    display:grid;
-    gap:10px;
+.quick{display:grid;gap:10px}
+.quick button{
+  border:1px solid var(--border);
+  background:#fafafa;
+  padding:14px;
+  border-radius:12px;
+  text-align:left;
+  cursor:pointer;
 }
+.quick button:hover{background:#f0fdfa;border-color:#99f6e4}
 
-.action{
-    border:1px solid var(--border);
-    background:#fafafa;
-    padding:14px;
-    border-radius:12px;
-    cursor:pointer;
-    text-align:left;
+/* CUSTOMER CARDS */
+.customer-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
 }
+.customer-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+.customer-card h3{font-size:15px;margin-bottom:5px}
+.customer-card p{font-size:13px;color:var(--muted);margin-top:4px}
 
-.action:hover{
-    background:#f0fdfa;
-    border-color:#99f6e4;
+/* REVIEWS */
+.review{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:10px;
 }
+.review-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.stars{color:#d97706}
+.review p{margin:8px 0;color:#475569;line-height:1.5}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#17202a;
+  color:white;
+  padding:13px 17px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  transform:translateY(100px);
+  opacity:0;
+  transition:.25s;
+  z-index:300;
+  font-size:14px;
+}
+.toast.show{transform:translateY(0);opacity:1}
 
 /* MOBILE */
-
-.mobile-menu{
-    display:none;
-    border:none;
-    background:transparent;
-    font-size:25px;
-    cursor:pointer;
-}
-
 .overlay{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.4);
-    z-index:40;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:90;
 }
-
-@media(max-width:1000px){
-
-    .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .grid{
-        grid-template-columns:1fr;
-    }
+@media(max-width:1050px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr}
+  .customer-grid{grid-template-columns:repeat(2,1fr)}
 }
-
 @media(max-width:700px){
-
-    .sidebar{
-        transform:translateX(-100%);
-        transition:.25s;
-    }
-
-    .sidebar.open{
-        transform:translateX(0);
-    }
-
-    .overlay.open{
-        display:block;
-    }
-
-    .main{
-        margin-left:0;
-    }
-
-    .mobile-menu{
-        display:block;
-    }
-
-    .topbar{
-        padding:0 16px;
-    }
-
-    .content{
-        padding:18px 14px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-    }
-
-    .stat-card{
-        padding:15px;
-    }
-
-    .stat-card h3{
-        font-size:22px;
-    }
-
-    .welcome h1{
-        font-size:22px;
-    }
-
-    .toolbar{
-        flex-direction:column;
-    }
-
-    .admin-user span{
-        display:none;
-    }
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .main{margin-left:0}
+  .menu{display:block}
+  .topbar{padding:0 15px}
+  .content{padding:18px 13px}
+  .admin span{display:none}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat{padding:15px}
+  .stat strong{font-size:23px}
+  .toolbar{flex-direction:column}
+  .customer-grid{grid-template-columns:1fr}
 }
-
 @media(max-width:430px){
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .login-box{
-        padding:25px 20px;
-    }
+  .stats{grid-template-columns:1fr}
+  .login-card{padding:25px 20px}
 }
 </style>
 </head>
@@ -548,470 +428,524 @@ th{
 <body>
 
 <!-- LOGIN -->
+<section class="login" id="loginPage">
+  <div class="login-card">
+    <div class="logo">🐾</div>
+    <h1>HVS Admin</h1>
+    <p class="login-sub">Home Vet Service Management</p>
 
-<section class="login-page" id="loginPage">
+    <div class="error" id="loginError"></div>
 
-    <div class="login-box">
+    <input
+      id="adminKey"
+      class="field"
+      type="password"
+      placeholder="Enter ADMIN_KEY"
+      autocomplete="current-password"
+    >
 
-        <div class="logo">🐾</div>
+    <button class="primary-btn" id="loginBtn" onclick="login()">
+      Open Dashboard
+    </button>
 
-        <h1>HVS Admin</h1>
-
-        <p>Home Vet Service management dashboard</p>
-
-        <div class="error" id="loginError">
-            Please enter the correct ADMIN_KEY.
-        </div>
-
-        <input
-            type="password"
-            id="adminKey"
-            class="input"
-            placeholder="Enter ADMIN_KEY"
-            autocomplete="current-password"
-        >
-
-        <button class="btn btn-primary" onclick="login()">
-            Open Dashboard
-        </button>
-
-    </div>
-
+    <p class="login-note">
+      Secure administrator access
+    </p>
+  </div>
 </section>
 
 
-<!-- DASHBOARD -->
-
+<!-- APP -->
 <div class="app" id="app">
 
-    <aside class="sidebar" id="sidebar">
+  <aside class="sidebar" id="sidebar">
 
-        <div class="brand">
-            <div class="brand-icon">🐾</div>
-            <div>
-                <strong>HVS</strong>
-                <small>Home Vet Service</small>
-            </div>
+    <div class="brand">
+      <div class="brand-logo">🐾</div>
+      <div>
+        <strong>HVS</strong>
+        <small>Home Vet Service</small>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="active" onclick="showSection('dashboard',this)">
+        📊 &nbsp; Dashboard
+      </button>
+
+      <button onclick="showSection('bookings',this)">
+        📋 &nbsp; Bookings
+      </button>
+
+      <button onclick="showSection('customers',this)">
+        👥 &nbsp; Customers
+      </button>
+
+      <button onclick="showSection('reviews',this)">
+        ⭐ &nbsp; Reviews
+      </button>
+
+      <button onclick="showSection('settings',this)">
+        ⚙️ &nbsp; Settings
+      </button>
+    </nav>
+
+    <button class="nav logout" onclick="logout()">
+      🚪 &nbsp; Logout
+    </button>
+
+  </aside>
+
+  <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="top-left">
+        <button class="menu" onclick="openMenu()">☰</button>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+
+      <div class="admin">
+        <span>Administrator</span>
+        <div class="avatar">A</div>
+      </div>
+    </header>
+
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <section id="dashboardSection">
+
+        <div class="welcome">
+          <h1>Welcome back 👋</h1>
+          <p>Here's what's happening with HVS today.</p>
         </div>
 
-        <nav class="nav">
+        <div class="stats">
 
-            <button class="active" onclick="showSection('dashboard',this)">
-                📊 &nbsp; Dashboard
-            </button>
+          <div class="stat">
+            <div>
+              <small>Total Bookings</small>
+              <strong id="totalCount">0</strong>
+            </div>
+            <div class="icon i-total">📋</div>
+          </div>
 
-            <button onclick="showSection('requests',this)">
-                📋 &nbsp; Service Requests
-            </button>
+          <div class="stat">
+            <div>
+              <small>New</small>
+              <strong id="newCount">0</strong>
+            </div>
+            <div class="icon i-new">⏳</div>
+          </div>
 
-            <button onclick="showSection('customers',this)">
-                👥 &nbsp; Customers
-            </button>
+          <div class="stat">
+            <div>
+              <small>Confirmed</small>
+              <strong id="confirmedCount">0</strong>
+            </div>
+            <div class="icon i-confirmed">✓</div>
+          </div>
 
-            <button onclick="showSection('settings',this)">
-                ⚙️ &nbsp; Settings
-            </button>
+          <div class="stat">
+            <div>
+              <small>Completed</small>
+              <strong id="completedCount">0</strong>
+            </div>
+            <div class="icon i-completed">🐾</div>
+          </div>
 
-        </nav>
+        </div>
 
-        <button class="nav logout" onclick="logout()">
-            🚪 &nbsp; Logout
-        </button>
 
-    </aside>
+        <div class="grid">
 
-    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+          <div class="panel">
 
-    <main class="main">
+            <div class="panel-head">
+              <h2>Recent Bookings</h2>
+              <button class="btn btn-soft" onclick="showSection('bookings')">
+                View all
+              </button>
+            </div>
 
-        <header class="topbar">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Pet</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTable"></tbody>
+              </table>
+            </div>
 
-            <div style="display:flex;align-items:center;gap:13px">
+          </div>
 
-                <button class="mobile-menu" onclick="openMenu()">
-                    ☰
+
+          <div class="panel">
+
+            <div class="panel-head">
+              <h2>Quick Actions</h2>
+            </div>
+
+            <div class="panel-body">
+              <div class="quick">
+
+                <button onclick="showSection('bookings')">
+                  📋 &nbsp; Manage bookings
                 </button>
 
-                <h2 id="pageTitle">Dashboard</h2>
+                <button onclick="refreshAll()">
+                  🔄 &nbsp; Refresh dashboard
+                </button>
 
+                <button onclick="exportCSV()">
+                  📥 &nbsp; Export bookings
+                </button>
+
+                <button onclick="showSection('reviews')">
+                  ⭐ &nbsp; Manage reviews
+                </button>
+
+              </div>
             </div>
 
-            <div class="admin-user">
-
-                <span>Administrator</span>
-
-                <div class="avatar">
-                    A
-                </div>
-
-            </div>
-
-        </header>
-
-
-        <div class="content">
-
-            <!-- DASHBOARD SECTION -->
-
-            <section id="dashboardSection">
-
-                <div class="welcome">
-
-                    <h1>Welcome back 👋</h1>
-
-                    <p>
-                        Manage your Home Vet Service requests from one place.
-                    </p>
-
-                </div>
-
-
-                <div class="stats">
-
-                    <div class="stat-card total">
-                        <div>
-                            <p>Total Requests</p>
-                            <h3 id="totalRequests">0</h3>
-                        </div>
-                        <div class="stat-icon">📋</div>
-                    </div>
-
-                    <div class="stat-card pending">
-                        <div>
-                            <p>Pending</p>
-                            <h3 id="pendingRequests">0</h3>
-                        </div>
-                        <div class="stat-icon">⏳</div>
-                    </div>
-
-                    <div class="stat-card confirmed">
-                        <div>
-                            <p>Confirmed</p>
-                            <h3 id="confirmedRequests">0</h3>
-                        </div>
-                        <div class="stat-icon">✓</div>
-                    </div>
-
-                    <div class="stat-card completed">
-                        <div>
-                            <p>Completed</p>
-                            <h3 id="completedRequests">0</h3>
-                        </div>
-                        <div class="stat-icon">🐾</div>
-                    </div>
-
-                </div>
-
-
-                <div class="grid">
-
-                    <div class="panel">
-
-                        <div class="panel-head">
-                            <h2>Recent Requests</h2>
-
-                            <button
-                                class="btn"
-                                style="background:#ccfbf1;color:#115e59"
-                                onclick="showSection('requests')"
-                            >
-                                View all
-                            </button>
-                        </div>
-
-                        <div class="table-wrap">
-                            <table>
-
-                                <thead>
-                                    <tr>
-                                        <th>Customer</th>
-                                        <th>Pet</th>
-                                        <th>Location</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="recentRequests">
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel">
-
-                        <div class="panel-head">
-                            <h2>Quick Actions</h2>
-                        </div>
-
-                        <div class="panel-body">
-
-                            <div class="actions">
-
-                                <button
-                                    class="action"
-                                    onclick="showSection('requests')"
-                                >
-                                    📋 &nbsp; View service requests
-                                </button>
-
-                                <button
-                                    class="action"
-                                    onclick="refreshData()"
-                                >
-                                    🔄 &nbsp; Refresh requests
-                                </button>
-
-                                <button
-                                    class="action"
-                                    onclick="exportCSV()"
-                                >
-                                    📥 &nbsp; Export requests
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- REQUESTS SECTION -->
-
-            <section id="requestsSection" style="display:none">
-
-                <div class="welcome">
-
-                    <h1>Service Requests</h1>
-
-                    <p>
-                        View and manage customer service requests.
-                    </p>
-
-                </div>
-
-                <div class="panel">
-
-                    <div class="panel-body">
-
-                        <div class="toolbar">
-
-                            <input
-                                id="searchInput"
-                                class="search"
-                                placeholder="Search customer, phone, location..."
-                                oninput="renderRequests()"
-                            >
-
-                            <select
-                                id="statusFilter"
-                                class="select"
-                                onchange="renderRequests()"
-                            >
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-
-                        </div>
-
-                        <div class="table-wrap">
-
-                            <table>
-
-                                <thead>
-
-                                    <tr>
-                                        <th>Customer</th>
-                                        <th>Phone</th>
-                                        <th>Pet</th>
-                                        <th>Service</th>
-                                        <th>Location</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                    </tr>
-
-                                </thead>
-
-                                <tbody id="requestTable">
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- CUSTOMERS -->
-
-            <section id="customersSection" style="display:none">
-
-                <div class="welcome">
-
-                    <h1>Customers</h1>
-
-                    <p>
-                        Customer information from service requests.
-                    </p>
-
-                </div>
-
-                <div class="panel">
-
-                    <div class="empty">
-
-                        <div class="empty-icon">👥</div>
-
-                        <h3>Customer management</h3>
-
-                        <p>
-                            Customer information will appear here
-                            when requests are loaded.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- SETTINGS -->
-
-            <section id="settingsSection" style="display:none">
-
-                <div class="welcome">
-
-                    <h1>Settings</h1>
-
-                    <p>
-                        Dashboard and administrator settings.
-                    </p>
-
-                </div>
-
-                <div class="panel">
-
-                    <div class="panel-body">
-
-                        <h3 style="margin-bottom:8px">
-                            HVS Admin Dashboard
-                        </h3>
-
-                        <p style="color:#6b7280;line-height:1.7">
-                            Your authentication key is stored only in
-                            this browser session and is not displayed
-                            after login.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
+          </div>
 
         </div>
 
-    </main>
+      </section>
 
+
+      <!-- BOOKINGS -->
+      <section id="bookingsSection" style="display:none">
+
+        <div class="welcome">
+          <h1>Service Bookings</h1>
+          <p>Manage incoming HVS home veterinary service requests.</p>
+        </div>
+
+        <div class="panel">
+
+          <div class="panel-body">
+
+            <div class="toolbar">
+
+              <input
+                id="searchInput"
+                class="search"
+                placeholder="Search name, phone, pet, service or address..."
+                oninput="renderBookings()"
+              >
+
+              <select id="statusFilter" onchange="renderBookings()">
+                <option value="all">All statuses</option>
+                <option value="new">New</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+
+              <button class="btn btn-refresh" onclick="refreshAll()">
+                🔄 Refresh
+              </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Pet</th>
+                    <th>Service</th>
+                    <th>Date / Time</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody id="bookingTable"></tbody>
+
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- CUSTOMERS -->
+      <section id="customersSection" style="display:none">
+
+        <div class="welcome">
+          <h1>Customers</h1>
+          <p>Customers who have submitted HVS bookings.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-body">
+            <div class="customer-grid" id="customerGrid"></div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- REVIEWS -->
+      <section id="reviewsSection" style="display:none">
+
+        <div class="welcome">
+          <h1>Reviews</h1>
+          <p>Approve or remove customer reviews.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-body">
+            <div id="reviewList"></div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- SETTINGS -->
+      <section id="settingsSection" style="display:none">
+
+        <div class="welcome">
+          <h1>Settings</h1>
+          <p>HVS administrator settings.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-body">
+
+            <h3>Admin Session</h3>
+
+            <p style="color:#64748b;margin-top:7px;line-height:1.6">
+              Your ADMIN_KEY is kept only in this page's memory.
+              Logging out clears the key from this session.
+            </p>
+
+            <button
+              class="btn btn-danger"
+              style="margin-top:18px"
+              onclick="logout()"
+            >
+              🚪 Logout
+            </button>
+
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
 </div>
 
 
-<script>
+<div class="toast" id="toast"></div>
 
+
+<script>
 /*
 =========================================================
-HVS ADMIN CONFIGURATION
+HVS ADMIN
+Uses the REAL HVS server API.
 =========================================================
 
-IMPORTANT:
+Authentication:
+X-Admin-Key
 
-If your current backend uses a different endpoint,
-change API_URL below.
+Bookings:
+GET   /api/admin/bookings
+PATCH /api/admin/bookings/:id
 
-The dashboard first tries:
-
-GET /api/admin/requests
-
-with:
-
-Authorization: Bearer ADMIN_KEY
-
-If your existing backend already uses another endpoint,
-replace the request function below with your existing
-admin API endpoint.
+Reviews:
+GET    /api/admin/reviews
+PATCH  /api/admin/reviews/:id
+DELETE /api/admin/reviews/:id
+=========================================================
 */
 
-const API_URL = "/api/admin/requests";
+const BOOKINGS_API = "/api/admin/bookings";
+const REVIEWS_API = "/api/admin/reviews";
 
 let adminKey = "";
-let requests = [];
+let bookings = [];
+let reviews = [];
 
 
-/* LOGIN */
+/* ---------------- LOGIN ---------------- */
 
 async function login(){
 
-    const input = document.getElementById("adminKey");
-    const error = document.getElementById("loginError");
+  const input = document.getElementById("adminKey");
+  const error = document.getElementById("loginError");
+  const button = document.getElementById("loginBtn");
 
-    adminKey = input.value.trim();
+  const key = input.value.trim();
 
-    if(!adminKey){
-        error.style.display = "block";
-        error.textContent = "Please enter your ADMIN_KEY.";
-        return;
-    }
+  if(!key){
+    showLoginError("Please enter your ADMIN_KEY.");
+    return;
+  }
 
-    error.style.display = "none";
+  adminKey = key;
+
+  button.disabled = true;
+  button.textContent = "Checking...";
+
+  try{
 
     /*
-    Try loading real data.
-    */
+     * IMPORTANT:
+     * Your server requires X-Admin-Key.
+     */
 
-    try{
+    const response = await fetch(BOOKINGS_API,{
+      method:"GET",
+      headers:{
+        "X-Admin-Key":adminKey
+      },
+      cache:"no-store"
+    });
 
-        await loadRequests();
-
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("app").style.display = "block";
-
-    }catch(error){
-
-        console.error(error);
-
-        /*
-        If the backend endpoint is unavailable,
-        still open the dashboard so the UI can be used.
-        */
-
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("app").style.display = "block";
-
-        requests = [];
-
-        updateDashboard();
-
+    if(response.status === 401){
+      throw new Error("Incorrect ADMIN_KEY.");
     }
+
+    if(!response.ok){
+      throw new Error("Server error: " + response.status);
+    }
+
+    const data = await response.json();
+
+    bookings = Array.isArray(data) ? data : [];
+
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("app").style.display = "block";
+
+    updateDashboard();
+
+    /*
+     * Reviews are loaded separately.
+     * If there are no reviews or the endpoint fails,
+     * the booking dashboard still works.
+     */
+    loadReviews();
+
+    showToast("Welcome to HVS Admin");
+
+  }catch(error){
+
+    console.error(error);
+
+    showLoginError(
+      error.message === "Incorrect ADMIN_KEY."
+        ? "Incorrect ADMIN_KEY. Please check your Render environment variable."
+        : "Unable to connect to the HVS server."
+    );
+
+    adminKey = "";
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "Open Dashboard";
+
+  }
 }
 
 
-/* LOAD REQUESTS */
+function showLoginError(message){
 
-async function loadRequests(){
+  const error = document.getElementById("loginError");
 
-    const response = await fetch(API_URL,{
-        method:"GET",
+  error.textContent = message;
+  error.style.display = "block";
+
+}
+
+
+/* ---------------- BOOKINGS ---------------- */
+
+async function loadBookings(){
+
+  if(!adminKey) return;
+
+  const response = await fetch(BOOKINGS_API,{
+    method:"GET",
+    headers:{
+      "X-Admin-Key":adminKey
+    },
+    cache:"no-store"
+  });
+
+  if(response.status === 401){
+    logout();
+    throw new Error("Session expired.");
+  }
+
+  if(!response.ok){
+    throw new Error("Could not load bookings.");
+  }
+
+  const data = await response.json();
+
+  bookings = Array.isArray(data) ? data : [];
+
+  updateDashboard();
+
+}
+
+
+async function updateBookingStatus(id,status){
+
+  if(!adminKey) return;
+
+  const allowed = [
+    "new",
+    "confirmed",
+    "completed",
+    "cancelled"
+  ];
+
+  if(!allowed.includes(status)) return;
+
+  try{
+
+    const response = await fetch(
+      BOOKINGS_API + "/" + encodeURIComponent(id),
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":"application/json",
+          "X-Admin-Key":adminKey
+        },
+        body:JSON.stringify({status})
+      }
+    );
+
+    if(response.status === 401){
+      logout();
+      return;
+    }
+
+    if(!response.ok){
+      throw new Error("Status upda
