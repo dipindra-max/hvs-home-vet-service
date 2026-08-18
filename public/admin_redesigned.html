@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HVS Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0f172a;color:#e5e7eb}
+.container{max-width:1200px;margin:auto;padding:24px}
+.header{background:linear-gradient(135deg,#0f766e,#16a34a);padding:22px;border-radius:18px;color:#fff}
+.card{background:#111827;border:1px solid #334155;border-radius:16px;padding:18px;margin-top:18px}
+.login{display:flex;gap:10px;flex-wrap:wrap}
+input,select{background:#1f2937;color:#fff;border:1px solid #475569;border-radius:10px;padding:12px}
+input{flex:1}
+button{background:#10b981;color:#fff;border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer}
+.danger{background:#ef4444}
+.table{overflow:auto;margin-top:10px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:12px;border-bottom:1px solid #374151;text-align:left;vertical-align:top}
+th{background:#0b1220}
+.badge{background:#1f2937;padding:4px 8px;border-radius:999px;font-size:12px}
+a{color:#60a5fa}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header"><h1>🐾 HVS Admin Dashboard</h1><p>Modern responsive admin panel</p></div>
+<div class="card">
+<h3>Admin Login</h3>
+<div class="login">
+<input id="k" type="password" placeholder="Enter ADMIN_KEY">
+<button onclick="load()">Open Dashboard</button>
+</div></div>
+<div id="out"></div></div>
+<script>
+let K="";
+async function api(u,o={}){o.headers={...(o.headers||{}),"x-admin-key":K};let r=await fetch(u,o),d=await r.json();if(!r.ok)throw Error(d.error);return d}
+async function load(){K=k.value;try{let[b,r]=await Promise.all([api("/api/admin/bookings"),api("/api/admin/reviews")]);out.innerHTML=`<div class="card"><h2>Bookings (${b.length})</h2><div class="table"><table><tr><th>Customer</th><th>Visit</th><th>Location</th><th>Status</th></tr>${b.map(x=>`<tr><td><b>${x.name}</b><br>${x.phone}<br>${x.pet}</td><td>${x.service}<br><span class="badge">${x.date} ${x.time}</span><br>${x.notes||""}</td><td>${x.lat?`<a target="_blank" href="https://www.google.com/maps?q=${x.lat},${x.lng}">📍 GPS</a>`:""}<br>${x.address||""}</td><td><select onchange="st(${x.id},this.value)"><option ${x.status=="new"?"selected":""}>new</option><option ${x.status=="confirmed"?"selected":""}>confirmed</option><option ${x.status=="completed"?"selected":""}>completed</option><option ${x.status=="cancelled"?"selected":""}>cancelled</option></select></td></tr>`).join("")}</table></div></div><div class="card"><h2>Reviews (${r.length})</h2><div class="table"><table><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Action</th></tr>${r.map(x=>`<tr><td><b>${x.name}</b><br>${x.pet}</td><td>${"⭐".repeat(x.rating)}</td><td>${x.review}</td><td>${x.approved?`<button class="danger" onclick="ap(${x.id},0)">Hide</button>`:`<button onclick="ap(${x.id},1)">Approve</button>`}<button class="danger" onclick="delr(${x.id})">Delete</button></td></tr>`).join("")}</table></div></div>`}catch(e){alert(e.message)}}
+async function ap(id,a){await api("/api/admin/reviews/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({approved:a})});load()}
+async function delr(id){if(confirm("Delete review?")){await api("/api/admin/reviews/"+id,{method:"DELETE"});load()}}
+async function st(id,s){await api("/api/admin/bookings/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:s})})}
+</script></body></html>
