@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HVS Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#122b23;
+    --ink-soft:#4c655c;
+    --bg:#eef6f2;
+    --panel:#ffffff;
+    --line:#dde8e2;
+    --brand:#0b6b55;
+    --brand-dark:#084d3d;
+    --brand-tint:#dcefe7;
+    --accent:#6a4fa0;
+    --accent-tint:#eae4f5;
+    --gold:#b8860a;
+    --danger:#b52b2b;
+    --danger-tint:#fbe6e6;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(18,43,35,.04), 0 8px 24px -12px rgba(18,43,35,.12);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 100% -10%, var(--brand-tint), transparent),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  .w{width:min(1100px,94%);margin:auto;padding-bottom:60px}
+
+  header.top{padding:36px 0 8px}
+  .brand-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{
+    width:40px;height:40px;border-radius:11px;
+    background:linear-gradient(155deg,var(--brand),var(--brand-dark));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Fraunces',serif;font-weight:700;font-size:18px;
+    box-shadow:var(--shadow);
+    flex-shrink:0;
+  }
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:28px;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--ink-soft);font-size:13.5px;margin-top:2px}
+
+  .keybar{display:flex;gap:8px;align-items:center}
+  .keybar input{
+    font-family:'Inter',monospace;
+    border:1.5px solid var(--line);background:var(--panel);
+    padding:10px 14px;border-radius:11px;min-width:200px;
+    font-size:14px;color:var(--ink);outline:none;transition:border-color .15s;
+  }
+  .keybar input:focus{border-color:var(--brand)}
+  button{
+    font:inherit;font-weight:600;font-size:13.5px;
+    padding:10px 18px;border:0;border-radius:11px;
+    background:var(--brand);color:#fff;cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, background .15s;
+    box-shadow:0 1px 0 rgba(0,0,0,.05);
+  }
+  button:hover{background:var(--brand-dark);transform:translateY(-1px)}
+  button:active{transform:translateY(0)}
+  button.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand-tint)}
+  button.ghost:hover{background:var(--brand-tint)}
+  button.red{background:var(--danger)}
+  button.red:hover{background:#8f2121}
+  button.sm{padding:6px 12px;font-size:12.5px;border-radius:9px}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0}
+  .stat{
+    background:var(--panel);border-radius:14px;padding:16px 18px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+  }
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:26px;font-weight:600;line-height:1.1}
+  .stat span{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+
+  .tabs{display:flex;gap:4px;margin:8px 0 0;border-bottom:1.5px solid var(--line)}
+  .tab{
+    padding:11px 18px;font-weight:600;font-size:14px;color:var(--ink-soft);
+    cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;
+    transition:color .15s, border-color .15s;user-select:none;
+  }
+  .tab.active{color:var(--brand-dark);border-color:var(--brand)}
+  .tab .count{
+    display:inline-block;margin-left:6px;background:var(--brand-tint);color:var(--brand-dark);
+    border-radius:20px;padding:1px 8px;font-size:11.5px;font-weight:700;
+  }
+
+  .box{
+    background:var(--panel);padding:22px 22px 26px;border-radius:var(--radius);
+    margin:20px 0;box-shadow:var(--shadow);border:1px solid var(--line);
+    overflow:auto;
+  }
+  .box h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 4px}
+  .box .hint{font-size:12.5px;color:var(--ink-soft);margin:0 0 16px}
+
+  table{border-collapse:collapse;width:100%;min-width:680px}
+  th{
+    text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-soft);padding:0 12px 10px;border-bottom:1.5px solid var(--line);
+    font-weight:700;
+  }
+  td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+  tr:last-child td{border-bottom:0}
+  tr.row:hover{background:#f7fbf9}
+  .name{font-weight:600}
+  .muted{color:var(--ink-soft);font-size:12.5px}
+  .pet-tag{
+    display:inline-block;margin-top:4px;font-size:11.5px;font-weight:600;
+    background:var(--accent-tint);color:var(--accent);padding:2px 8px;border-radius:20px;
+  }
+  a.gps{color:var(--brand);font-weight:600;text-decoration:none;font-size:13px}
+  a.gps:hover{text-decoration:underline}
+  .stars{color:var(--gold);letter-spacing:1px}
+  .review-text{max-width:320px;display:inline-block;line-height:1.45}
+
+  select.status{
+    appearance:none;-webkit-appearance:none;
+    font:inherit;font-weight:700;font-size:12.5px;letter-spacing:.02em;
+    padding:7px 30px 7px 12px;border-radius:20px;border:1.5px solid transparent;
+    cursor:pointer;background-repeat:no-repeat;background-position:right 10px center;
+    background-size:10px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%23122b23'/></svg>");
+  }
+  select.status.st-new{background-color:var(--accent-tint);color:var(--accent)}
+  select.status.st-confirmed{background-color:#fff4d6;color:#8a6400}
+  select.status.st-completed{background-color:var(--brand-tint);color:var(--brand-dark)}
+  select.status.st-cancelled{background-color:var(--danger-tint);color:var(--danger)}
+
+  .approve-badge{
+    display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+    padding:3px 9px;border-radius:20px;margin-bottom:8px;
+  }
+  .approve-badge.live{background:var(--brand-tint);color:var(--brand-dark)}
+  .approve-badge.hidden{background:var(--danger-tint);color:var(--danger)}
+  .actions{display:flex;gap:6px;flex-wrap:wrap}
+
+  .empty{
+    text-align:center;padding:44px 20px;color:var(--ink-soft);
+  }
+  .empty b{display:block;font-family:'Fraunces',serif;font-size:17px;color:var(--ink);margin-bottom:4px;font-weight:600}
+
+  .gate{
+    background:var(--panel);border-radius:var(--radius);padding:26px 24px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0;
+  }
+  .gate p{margin:0 0 0 2px;color:var(--ink-soft);font-size:13px;flex-basis:100%}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:11px;
+    font-size:13.5px;font-weight:600;box-shadow:0 12px 30px -8px rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.err{background:var(--danger)}
+
+  .spin{
+    width:16px;height:16px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+    display:inline-block;animation:sp .7s linear infinite;vertical-align:-3px;margin-right:6px;
+  }
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  @media (max-width:720px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    table, thead, tbody, th, td, tr{display:block}
+    thead{display:none}
+    tr.row{
+      border:1px solid var(--line);border-radius:12px;margin-bottom:12px;padding:12px;
+    }
+    tr.row td{border:0;padding:8px 4px}
+    tr.row td::before{
+      content:attr(data-label);display:block;font-size:10.5px;font-weight:700;
+      text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:3px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="w">
+
+  <header class="top">
+    <div class="brand-row">
+      <div class="brand">
+        <div class="mark">HV</div>
+        <div>
+          <h1>HVS Admin</h1>
+          <div class="sub">Bookings and reviews, in one place.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="gate">
+    <p>Enter your admin key to open the dashboard. Nothing loads until you do.</p>
+    <input id="k" type="password" placeholder="ADMIN_KEY" onkeydown="if(event.key==='Enter')load()">
+    <button onclick="load()" id="openBtn">Open dashboard</button>
+  </div>
+
+  <div id="statsWrap"></div>
+  <div id="tabsWrap"></div>
+  <div id="out"></div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let K = "";
+let DATA = { bookings: [], reviews: [] };
+let TAB = "bookings";
+
+async function api(u, o = {}) {
+  o.headers = { ...(o.headers || {}), "x-admin-key": K };
+  let r = await fetch(u, o);
+  let d = await r.json();
+  if (!r.ok) throw Error(d.error || "Request failed");
+  return d;
+}
+
+function toast(msg, isErr) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+async function load() {
+  K = k.value;
+  const btn = document.getElementById("openBtn");
+  const orig = btn.textContent;
+  btn.innerHTML = '<span class="spin"></span>Loading';
+  try {
+    const [b, r] = await Promise.all([
+      api("/api/admin/bookings"),
+      api("/api/admin/reviews")
+    ]);
+    DATA.bookings = b;
+    DATA.reviews = r;
+    document.querySelector(".gate").style.display = "none";
+    renderStats();
+    renderTabs();
+    render();
+  } catch (e) {
+    toast(e.message, true);
+  } finally {
+    btn.innerHTML = orig;
+  }
+}
+
+function renderStats() {
+  const b = DATA.bookings, r = DATA.reviews;
+  const newCount = b.filter(x => x.status === "new" || !x.status).length;
+  const avgRating = r.length ? (r.reduce((s, x) => s + Number(x.rating || 0), 0) / r.length).toFixed(1) : "—";
+  const pendingReviews = r.filter(x => !x.approved).length;
+  statsWrap.innerHTML = `
+    <div class="stats">
+      <div class="stat"><b>${b.length}</b><span>Total bookings</span></div>
+      <div class="stat"><b>${newCount}</b><span>Needs a look</span></div>
+      <div class="stat"><b>${avgRating}</b><span>Average rating</span></div>
+      <div class="stat"><b>${pendingReviews}</b><span>Reviews to approve</span></div>
+    </div>`;
+}
+
+function renderTabs() {
+  tabsWrap.innerHTML = `
+    <div class="tabs">
+      <div class="tab ${TAB === 'bookings' ? 'active' : ''}" onclick="switchTab('bookings')">
+        Bookings <span class="count">${DATA.bookings.length}</span>
+      </div>
+      <div class="tab ${TAB === 'reviews' ? 'active' : ''}" onclick="switchTab('reviews')">
+        Reviews <span class="count">${DATA.reviews.length}</span>
+      </div>
+    </div>`;
+}
+
+function switchTab(t) {
+  TAB = t;
+  renderTabs();
+  render();
+}
+
+function statusClass(s) {
+  return "st-" + (s || "new");
+}
+
+function render() {
+  if (TAB === "bookings") {
+    out.innerHTML = renderBookings();
+  } else {
+    out.innerHTML = renderReviews();
+  }
+}
+
+function renderBookings() {
+  const b = DATA.bookings;
+  if (!b.length) {
+    return `<div class="box"><div class="empty"><b>No bookings yet</b>New requests will show up here as soon as someone books a visit.</div></div>`;
+  }
+  return `<div class="box">
+    <h2>Bookings</h2>
+    <p class="hint">Update a status as a visit moves along — customers aren't notified automatically.</p>
+    <table>
+      <thead><tr><th>Customer</th><th>Visit</th><th>Location</th><th>Status</th></tr></thead>
+      <tbody>
+        ${b.map(x => `
+          <tr class="row">
+            <td data-label="Customer">
+              <div class="name">${esc(x.name)}</div>
+              <div class="muted">${esc(x.phone || "")}</div>
+              ${x.pet ? `<span class="pet-tag">${esc(x.pet)}</span>` : ""}
+            </td>
+            <td data-label="Visit">
+              <div>${esc(x.service || "")}</div>
+              <div class="muted">${esc(x.date || "")} ${esc(x.time || "")}</div>
+              ${x.notes ? `<div class="muted" style="margin-top:4px">${esc(x.notes)}</div>` : ""}
+            </td>
+            <td data-label="Location">
+              ${x.lat ? `<a class="gps" target="_blank" href="https://www.google.com/maps?q=${x.lat},${x.lng}">Open GPS ↗</a><br>` : ""}
+              <span class="muted">${esc(x.address || "")}</span>
+            </td>
+            <td data-label="Status">
+              <select class="status ${statusClass(x.status)}" onchange="st(${x.id}, this.value, this)">
+                ${["new","confirmed","completed","cancelled"].map(s =>
+                  `<option value="${s}" ${x.status === s ? "selected" : ""}>${s[0].toUpperCase()+s.slice(1)}</option>`
+                ).join("")}
+              </select>
+            </td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function renderReviews() {
+  const r = DATA.reviews;
+  if (!r.length) {
+    return `<div class="box"><div class="empty"><b>No reviews yet</b>Approved reviews appear on the site — nothing to moderate right now.</div></div>`;
+  }
+  return `<div class="box">
+    <h2>Reviews</h2>
+    <p class="hint">Approve a review to publish it on the site, or hide it without deleting.</p>
+    <table>
+      <thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Action</th></tr></thead>
+      <tbody>
+        ${r.map(x => `
+          <tr class="row">
+            <td data-label="Customer">
+              <div class="name">${esc(x.name)}</div>
+              ${x.pet ? `<span class="pet-tag">${esc(x.pet)}</span>` : ""}
+            </td>
+            <td data-label="Rating"><span class="stars">${"★".repeat(x.rating)}${"☆".repeat(Math.max(0,5-x.rating))}</span></td>
+            <td data-label="Review"><span class="review-text">${esc(x.review || "")}</span></td>
+            <td data-label="Action">
+              <div class="approve-badge ${x.approved ? 'live' : 'hidden'}">${x.approved ? "Live on site" : "Not visible"}</div>
+              <div class="actions">
+                ${x.approved
+                  ? `<button class="sm red" onclick="ap(${x.id},0)">Hide</button>`
+                  : `<button class="sm" onclick="ap(${x.id},1)">Approve</button>`}
+                <button class="sm red ghost" onclick="delr(${x.id})">Delete</button>
+              </div>
+            </td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+async function ap(id, a) {
+  try {
+    await api("/api/admin/reviews/" + id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved: a })
+    });
+    const rev = DATA.reviews.find(x => x.id === id);
+    if (rev) rev.approved = a;
+    toast(a ? "Review approved" : "Review hidden");
+    renderStats();
+    render();
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function delr(id) {
+  if (!confirm("Delete this review? This can't be undone.")) return;
+  try {
+    await api("/api/admin/reviews/" + id, { method: "DELETE" });
+    DATA.reviews = DATA.reviews.filter(x => x.id !== id);
+    toast("Review deleted");
+    renderStats();
+    renderTabs();
+    render();
+  } catch (e) {
+    toast(e.message, true);
+  }
+}
+
+async function st(id, s, el) {
+  const prevClass = el.className;
+  el.className = "status " + statusClass(s);
+  try {
+    await api("/api/admin/bookings/" + id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: s })
+    });
+    const bk = DATA.bookings.find(x => x.id === id);
+    if (bk) bk.status = s;
+    toast("Status updated to " + s);
+    renderStats();
+  } catch (e) {
+    el.className = prevClass;
+    toast(e.message, true);
+  }
+}
+</script>
+</body>
+</html>
