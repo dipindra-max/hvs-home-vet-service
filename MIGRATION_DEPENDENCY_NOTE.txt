@@ -1,0 +1,4 @@
+If you need to migrate an old local data.sqlite:
+npm install better-sqlite3
+npm run migrate:sqlite
+Then remove better-sqlite3 if desired; normal production runtime only needs pg + express.
